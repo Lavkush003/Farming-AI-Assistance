@@ -49,7 +49,6 @@
 
 
 
-
 import "dotenv/config";
 
 import express from "express";
@@ -67,23 +66,68 @@ import forumRouter from "./routes/forum.route.js";
 import financeRouter from "./routes/finance.route.js";
 import equipmentRouter from "./routes/equipment.route.js";
 
-// Check Gemini API key
+// ==========================================
+// Check required environment variables
+// ==========================================
+
 if (process.env.GEMINI_API_KEY) {
   console.log("✅ GEMINI_API_KEY loaded successfully");
 } else {
   console.error("❌ GEMINI_API_KEY is NOT configured");
 }
 
-// Connect to database
+// ==========================================
+// Connect to MongoDB
+// ==========================================
+
 await connectDB();
 
+// ==========================================
 // Create Express application
+// ==========================================
+
 const app = express();
 
-// Middleware
-app.use(express.json({ limit: "20mb" })); // Increased limit for image uploads
+// ==========================================
+// CORS Configuration
+// ==========================================
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests without an Origin header
+      // such as Postman/server-to-server requests.
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      console.warn(`⚠️ CORS blocked origin: ${origin}`);
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  })
+);
+
+// ==========================================
+// Body Parsers
+// ==========================================
+
+app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ limit: "20mb", extended: true }));
-app.use(cors());
+
+// ==========================================
+// API Routes
+// ==========================================
 
 // Authentication API
 app.use("/api/auth", authRouter);
@@ -112,35 +156,67 @@ app.use("/api/finance", financeRouter);
 // Equipment API
 app.use("/api/equipment", equipmentRouter);
 
-// Home / health check
+// ==========================================
+// Health Check
+// ==========================================
+
 app.get("/", (req, res) => {
-  res.json({
-    message: "FarmingHub API is running successfully"
+  res.status(200).json({
+    success: true,
+    message: "FarmingHub API is running successfully",
   });
 });
 
-// 404 handler
+// ==========================================
+// 404 Handler
+// ==========================================
+
 app.use((req, res) => {
   res.status(404).json({
-    error: "Route not found"
+    success: false,
+    error: "Route not found",
+    path: req.originalUrl,
   });
 });
 
-// Global error handler
+// ==========================================
+// Global Error Handler
+// ==========================================
+
 app.use((err, req, res, next) => {
-  console.error("Server Error:", err);
+  console.error("❌ Server Error:", err);
+
+  // Handle CORS errors
+  if (err.message === "Not allowed by CORS") {
+    return res.status(403).json({
+      success: false,
+      error: "CORS origin not allowed",
+    });
+  }
 
   res.status(500).json({
-    error: "Internal server error"
+    success: false,
+    error: "Internal server error",
   });
 });
 
-// Start server
+// ==========================================
+// Start Server
+// ==========================================
+
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
-  console.log(`💬 Chat API: http://localhost:${PORT}/api/chat`);
-  console.log(`🌦️  Weather API: http://localhost:${PORT}/api/weather-advisory`);
-  console.log(`📸 Vision API: http://localhost:${PORT}/api/vision/disease-detect`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("==========================================");
+  console.log("🚀 FarmingHub backend started successfully");
+  console.log(`📡 Port: ${PORT}`);
+  console.log(`🌐 Environment: ${process.env.NODE_ENV || "development"}`);
+  console.log("==========================================");
+  console.log(`💬 Chat API: /api/chat`);
+  console.log(`🌦️ Weather API: /api/weather-advisory`);
+  console.log(`📸 Vision API: /api/vision`);
+  console.log(`💬 Forum API: /api/forum`);
+  console.log(`💰 Finance API: /api/finance`);
+  console.log(`🚜 Equipment API: /api/equipment`);
+  console.log("==========================================");
 });
