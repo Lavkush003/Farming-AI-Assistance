@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext";
 
 const Products = () => {
   const { addToCart, cartItems, removeFromCart, updateQuantity } = useCart();
   const [search, setSearch] = useState("");
+  const [dbProducts, setDbProducts] = useState([]);
 
-  const [products] = useState([
+  const [staticProducts] = useState([
     { id: 1, name: "Organic Wheat Seeds", category: "Seeds", price: 120, image: "/images/wheat.png" },
     { id: 2, name: "Hybrid Rice Seeds", category: "Seeds", price: 150, image: "/images/rice.png" },
     { id: 3, name: "Maize Seeds Premium", category: "Seeds", price: 110, image: "/images/maize_seeds.png" },
@@ -36,7 +37,26 @@ const Products = () => {
     { id: 28, name: "Organic Micronutrient Mix", category: "Fertilizers", price: 420, image: "/images/micronutrient_mix.png" },
   ]);
 
-  const filteredProducts = products.filter(
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/products");
+        if (response.ok) {
+          const data = await response.json();
+          // Map backend _id to id so it matches existing component logic
+          const formattedDbProducts = data.map(p => ({ ...p, id: p._id }));
+          setDbProducts(formattedDbProducts);
+        }
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  const allProducts = [...dbProducts, ...staticProducts];
+
+  const filteredProducts = allProducts.filter(
     (product) =>
       product.name.toLowerCase().includes(search.toLowerCase()) ||
       product.category.toLowerCase().includes(search.toLowerCase())
@@ -47,7 +67,7 @@ const Products = () => {
       <div className="container py-5" style={{ marginTop: "70px" }}>
 
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="text-warning fw-bold">FarmHive Products</h2>
+          <h2 className="text-warning fw-bold">FarmingHub Products</h2>
 
           <input
             type="text"

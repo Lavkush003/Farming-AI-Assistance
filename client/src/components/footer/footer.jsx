@@ -13,7 +13,7 @@ function Footer() {
       <div className="container py-5">
         <div className="row">
           <div className="col-md-4 mb-4">
-            <h3 className="fw-bold text-warning">FarmHive</h3>
+            <h3 className="fw-bold text-warning">FarmingHub</h3>
             <p className="mt-3">
               Your trusted agriculture marketplace delivering quality seeds,
               tools, and farming essentials.
@@ -49,7 +49,7 @@ function Footer() {
           <div className="col-md-3 mb-4">
             <h5 className="text-warning fw-bold">Contact Us</h5>
             <ul className="list-unstyled mt-3">
-              <li className="mb-2">📞 +91 9876543210</li>
+              <li className="mb-2">📞 +91 7719425010</li>
               <li className="mb-2">📧 support@farmhive.com</li>
               <li>📍 Phagwara, India</li>
             </ul>
@@ -72,7 +72,7 @@ function Footer() {
                   style={{ width: "30px", height: "30px" }}
                 />
               </a>{" "}
-              <a href="https://www.linkedin.com/in/amish12/" className="me-3 text-warning fs-4">
+              <a href="https://www.linkedin.com/in/lavkush001/" className="me-3 text-warning fs-4">
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/8/81/LinkedIn_icon.svg"
                   alt="LinkedIn"
@@ -87,7 +87,7 @@ function Footer() {
 
         <p className="text-center mt-3 mb-0">
           © {new Date().getFullYear()}{" "}
-          <span className="text-warning">FarmHive</span> — All Rights Reserved.
+          <span className="text-warning">FarmingHub</span> — All Rights Reserved.
         </p>
       </div>
     </footer >

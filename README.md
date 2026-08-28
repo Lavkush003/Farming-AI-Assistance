@@ -1,5 +1,5 @@
-# FarmHive - Digital Agriculture Platform 🌾🐝
-FarmHive is a modern digital marketplace designed to connect farmers with quality agricultural inputs, tools, and buyers. It simplifies the supply chain with a transparent, technology-driven ecosystem.
+# FarmingHub - Digital Agriculture Platform 🌾🐝
+FarmingHub is a modern digital marketplace designed to connect farmers with quality agricultural inputs, tools, and buyers. It simplifies the supply chain with a transparent, technology-driven ecosystem.
 ## 🚀 Features
 ### 🛒 User Features
 *   **Authentication**: Secure Login and Registration system.
@@ -20,7 +20,7 @@ FarmHive is a modern digital marketplace designed to connect farmers with qualit
 *   **Styling**: Custom CSS, Glassmorphism design elements.
 ## 📂 Project Structure
 ```text
-FarmHive/
+FarmingHub/
 ├── client/                 # Frontend (React + Vite)
 │   ├── src/
 │   │   ├── assets/         # Images, Videos, Icons

@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import videoBg from "../../assets/front_video.mp4";
+import WeatherWidget from "../weather/WeatherWidget";
+import { useLanguage } from "../../context/LanguageContext";
 
 function Home() {
+  const { t } = useLanguage();
   return (
     <div>
 
@@ -57,16 +60,24 @@ function Home() {
         >
           <Link to="/products" className="btn btn-warning btn-lg px-5 fw-semibold " style={{
             position: "absolute", bottom: "-320px", left: "650px"
-          }}>Shop Now</Link>
+          }}> {t("shopNow")}</Link>
         </div>
       </section>
+
+      {/* ======================================
+          WEATHER & AI ADVISORY
+      ====================================== */}
+      <section className="container mt-5 mb-3" style={{ zIndex: 10, position: "relative" }}>
+        <WeatherWidget />
+      </section>
+
       <section className="container py-5">
         <h2 className="fw-bold text-center mb-4">Who We Are</h2>
         <p
           className="text-center fs-5 text-muted mx-auto"
           style={{ maxWidth: "900px" }}
         >
-          FarmHive is a digital agriculture platform designed to simplify how
+          FarmingHub is a digital agriculture platform designed to simplify how
           farmers access seeds, fertilizers, tools, irrigation equipment, and
           crop protection solutions. We aim to eliminate inefficiencies in the
           traditional supply chain and replace them with a transparent,
@@ -77,7 +88,7 @@ function Home() {
           style={{ maxWidth: "900px" }}
         >
           By combining trusted suppliers, modern technology, and a farmer-first
-          mindset, FarmHive helps agricultural communities grow sustainably and
+          mindset, FarmingHub helps agricultural communities grow sustainably and
           profitably.
         </p>
       </section>
@@ -87,13 +98,13 @@ function Home() {
       ====================================== */}
       <section className="py-5">
         <div className="container">
-          <h2 className="fw-bold text-center mb-5">Why Choose FarmHive</h2>
+          <h2 className="fw-bold text-center mb-5">Why Choose FarmingHub</h2>
 
           <div className="row text-center g-4">
             {[
               {
                 title: "Verified Quality Products",
-                desc: "All products available on FarmHive go through a quality verification process to ensure reliability and effectiveness on the field.",
+                desc: "All products available on FarmingHub go through a quality verification process to ensure reliability and effectiveness on the field.",
                 icon: "🌾",
               },
               {
@@ -130,7 +141,7 @@ function Home() {
           HOW FARMHIVE WORKS
       ====================================== */}
       <section className="container py-5">
-        <h2 className="fw-bold text-center mb-5">How FarmHive Works</h2>
+        <h2 className="fw-bold text-center mb-5">How FarmingHub Works</h2>
 
         <div className="row text-center g-4">
           {[
@@ -198,7 +209,7 @@ function Home() {
         style={{ backgroundColor: "#000" }}
       >
         <h2 className="fw-bold text-warning mb-3">
-          Partner with FarmHive
+          Partner with FarmingHub
         </h2>
         <p className="fs-5 mb-4">
           Join a growing community of farmers and agri-partners shaping the

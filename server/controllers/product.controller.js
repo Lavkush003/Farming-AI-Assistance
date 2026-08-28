@@ -62,3 +62,14 @@ export const deleteProduct = async (req, res) => {
     res.status(500).json({ error: "Failed to delete product" });
   }
 };
+
+// Get all products
+export const getAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 });
+    res.status(200).json(products);
+  } catch (err) {
+    console.error("Error fetching all products:", err);
+    res.status(500).json({ error: "Failed to fetch products" });
+  }
+};

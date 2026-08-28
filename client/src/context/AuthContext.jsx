@@ -8,18 +8,29 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const normalizeUser = (userData) => {
+        if (!userData) return null;
+
+        return {
+            ...userData,
+            id: userData.id || userData.uid || userData.email,
+            name: userData.name || userData.displayName || userData.email,
+        };
+    };
+
     useEffect(() => {
         // Check local storage for user on initial load
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            setUser(normalizeUser(JSON.parse(storedUser)));
         }
         setLoading(false);
     }, []);
 
     const login = (userData) => {
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
+        const normalizedUser = normalizeUser(userData);
+        setUser(normalizedUser);
+        localStorage.setItem("user", JSON.stringify(normalizedUser));
     };
 
     const logout = () => {

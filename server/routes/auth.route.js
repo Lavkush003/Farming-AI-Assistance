@@ -55,7 +55,7 @@ router.post(
       res.status(201).json({ message: "User registered successfully" });
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(503).json({ error: "Database unavailable. Please try again shortly." });
     }
   }
 );
@@ -133,7 +133,7 @@ router.post(
       res.json({ message: "Login successful", user: userPayload });
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(503).json({ error: "Database unavailable. Please try again shortly." });
     }
   }
 );

@@ -30,10 +30,16 @@ const Login = () => {
                 body: JSON.stringify(formData),
             });
 
-            const data = await res.json();
+            const responseText = await res.text();
+            let data = {};
+            try {
+                data = responseText ? JSON.parse(responseText) : {};
+            } catch {
+                data = { error: responseText };
+            }
 
             if (!res.ok) {
-                throw new Error(data.errors ? data.errors[0].msg : "Login failed");
+                throw new Error(data.errors?.[0]?.msg || data.error || "Login failed");
             }
 
             // Login success
@@ -53,6 +59,7 @@ const Login = () => {
             // For Google login, we might want to adapt the user object to match our schema
             // For now, we'll just use what Firebase gives us, plus a mock address if needed
             const googleUser = {
+                id: user.uid,
                 name: user.displayName,
                 email: user.email,
                 // Add other fields if necessary

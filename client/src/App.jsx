@@ -8,6 +8,14 @@ import Login from "./components/pages/Login.jsx";
 import Register from "./components/pages/Register.jsx";
 import SellerDashboard from "./components/pages/SellerDashboard.jsx";
 import ForgotPassword from "./components/pages/ForgotPassword.jsx";
+import Market from "./components/pages/Market.jsx";
+import DiseaseDetect from "./components/pages/DiseaseDetect.jsx";
+import Forum from "./components/pages/Forum.jsx";
+import Schemes from "./components/pages/Schemes.jsx";
+import Equipment from "./components/pages/Equipment.jsx";
+import YieldPredictor from "./components/pages/YieldPredictor.jsx";
+import ColdStorage from "./components/pages/ColdStorage.jsx";
+import Transport from "./components/pages/Transport.jsx";
 import { Routes, Route } from "react-router-dom";
 function App() {
   return (
@@ -19,6 +27,14 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/About" element={<About />} />
+        <Route path="/market" element={<Market />} />
+        <Route path="/disease-detect" element={<DiseaseDetect />} />
+        <Route path="/forum" element={<Forum />} />
+        <Route path="/schemes" element={<Schemes />} />
+        <Route path="/equipment" element={<Equipment />} />
+        <Route path="/yield-predictor" element={<YieldPredictor />} />
+        <Route path="/cold-storage" element={<ColdStorage />} />
+        <Route path="/transport" element={<Transport />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/seller" element={<SellerDashboard />} />

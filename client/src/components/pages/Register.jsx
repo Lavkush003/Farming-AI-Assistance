@@ -30,10 +30,16 @@ const Register = () => {
                 body: JSON.stringify(formData),
             });
 
-            const data = await res.json();
+            const responseText = await res.text();
+            let data = {};
+            try {
+                data = responseText ? JSON.parse(responseText) : {};
+            } catch {
+                data = { error: responseText };
+            }
 
             if (!res.ok) {
-                throw new Error(data.errors ? data.errors[0].msg : "Registration failed");
+                throw new Error(data.errors?.[0]?.msg || data.error || "Registration failed");
             }
 
             alert("Registration Successful! Please login.");

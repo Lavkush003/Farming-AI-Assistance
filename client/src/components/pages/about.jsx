@@ -49,7 +49,7 @@ const About = () => {
               From Intermediaries to One Platform
             </h2>
             <p className="text-muted fs-5">
-              FarmHive was created to eliminate inefficiencies in agricultural
+              FarmingHub was created to eliminate inefficiencies in agricultural
               supply chains and empower farmers with direct access to quality
               products.
             </p>
@@ -74,7 +74,7 @@ const About = () => {
         {/* ================= WHY FARMHIVE ================= */}
         <section className="py-5 text-center">
           <h5 className="text-warning fw-bold text-uppercase ls-2">Benefits</h5>
-          <h2 className="fw-bold mb-5">Why FarmHive?</h2>
+          <h2 className="fw-bold mb-5">Why FarmingHub?</h2>
 
           <div className="row g-4">
             {[
@@ -117,27 +117,27 @@ const About = () => {
           <div className="text-center mb-5">
             <h5 className="text-warning fw-bold text-uppercase ls-2">Team</h5>
             <h2 className="fw-bold text-warning">
-              The Minds Behind FarmHive
+              The Minds Behind FarmingHub
             </h2>
           </div>
 
           <div className="row g-4 justify-content-center">
             {[
               {
-                name: "Amish Verma",
+                name: "Lavkush Nishad",
                 role: "Founder & CEO",
                 img: founderImg,
               },
-              {
-                name: "Rajesh Kumar",
-                role: "Head of Supply Chain",
-                img: "https://randomuser.me/api/portraits/men/32.jpg",
-              },
-              {
-                name: "Vikram Singh",
-                role: "Tech Lead",
-                img: "https://randomuser.me/api/portraits/men/85.jpg",
-              },
+              // {
+              //   name: "Rajesh Kumar",
+              //   role: "Head of Supply Chain",
+              //   img: "https://randomuser.me/api/portraits/men/32.jpg",
+              // },
+              // {
+              //   name: "Vikram Singh",
+              //   role: "Tech Lead",
+              //   img: "https://randomuser.me/api/portraits/men/85.jpg",
+              // },
             ].map((member, i) => (
               <div className="col-md-3 col-6 text-center" key={i}>
                 <img
@@ -163,7 +163,7 @@ const About = () => {
             Ready to Upgrade Your Farm?
           </h2>
           <p className="fs-5 mb-4">
-            Join thousands of farmers using FarmHive today.
+            Join thousands of farmers using FarmingHub today.
           </p>
           <Link
             to="/products"
