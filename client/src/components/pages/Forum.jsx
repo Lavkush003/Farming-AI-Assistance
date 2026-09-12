@@ -294,9 +294,10 @@ import { useTheme } from "../../context/ThemeContext";
 //   https://your-backend.onrender.com
 //
 // Do NOT add /api/forum to VITE_API_URL.
+// 
+
 const API_URL =
-  import.meta.env.VITE_API_URL?.replace(/\/+$/, "") ||
-  "http://localhost:5000";
+  import.meta.env.VITE_API_URL?.replace(/\/+$/, "");
 
 // ============================================================
 // HELPER: API REQUEST WITH TIMEOUT
