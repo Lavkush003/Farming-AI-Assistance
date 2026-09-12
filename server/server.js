@@ -95,6 +95,8 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
+  "http://localhost:5000",
+  "https://farming-ai-assistance-a6gev55vk-lavkush003s-projects.vercel.app",
   process.env.CLIENT_URL,
 ].filter(Boolean);
 
@@ -107,7 +109,8 @@ app.use(
         return callback(null, true);
       }
 
-      if (allowedOrigins.includes(origin)) {
+      // Check if origin matches allowed origins or is a Vercel deployment
+      if (allowedOrigins.includes(origin) || origin.includes("vercel.app")) {
         return callback(null, true);
       }
 
@@ -115,6 +118,8 @@ app.use(
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
