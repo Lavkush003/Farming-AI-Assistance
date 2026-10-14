@@ -2,6 +2,10 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 
+const API_URL =
+  import.meta.env.VITE_API_URL?.replace(/\/+$/, "") ||
+  (import.meta.env.DEV ? "http://localhost:5000" : "");
+
 const SellerDashboard = () => {
   const { user } = useAuth();
   const { theme } = useTheme();
@@ -12,6 +16,8 @@ const SellerDashboard = () => {
   const [finances, setFinances] = useState([]);
   const [equipment, setEquipment] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [editingEquipmentId, setEditingEquipmentId] = useState(null);
+  const [equipmentEditForm, setEquipmentEditForm] = useState({ pricePerHour: "", image: "" });
 
   const [formData, setFormData] = useState({
     name: "", description: "", price: "", image: "", category: "",
@@ -48,7 +54,7 @@ const SellerDashboard = () => {
   const fetchMyEquipment = useCallback(async () => {
     if (!user?.id) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/equipment/my-equipment/${user.id}`);
+      const response = await fetch(`${API_URL}/api/equipment/my-equipment/${user.id}`);
       if (!response.ok) throw new Error("Failed to fetch equipment");
       const data = await response.json();
       setEquipment(Array.isArray(data) ? data : []);
@@ -64,6 +70,69 @@ const SellerDashboard = () => {
   const handleProductChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
   const handleFinanceChange = (e) => setFinanceForm({ ...financeForm, [e.target.name]: e.target.value });
   const handleEquipmentChange = (e) => setEquipmentForm({ ...equipmentForm, [e.target.name]: e.target.value });
+
+  const handleEquipmentEdit = (item) => {
+    setEditingEquipmentId(item._id);
+    setEquipmentEditForm({ pricePerHour: String(item.pricePerHour), image: "" });
+  };
+
+  const handleEquipmentImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result !== "string") {
+        alert("Could not read the selected image. Please try another file.");
+        return;
+      }
+      setEquipmentEditForm((current) => ({ ...current, image: reader.result }));
+    };
+    reader.onerror = () => alert("Could not read the selected image. Please try another file.");
+    reader.readAsDataURL(file);
+  };
+
+  const handleUpdateEquipment = async (e, item) => {
+    e.preventDefault();
+    if (!user?.id) {
+      alert("Please log in again before updating equipment.");
+      return;
+    }
+
+    const pricePerHour = Number(equipmentEditForm.pricePerHour);
+    if (!Number.isFinite(pricePerHour) || pricePerHour < 0) {
+      alert("Enter a valid non-negative hourly price.");
+      return;
+    }
+
+    const updates = { pricePerHour, ownerId: user.id };
+    if (equipmentEditForm.image) updates.image = equipmentEditForm.image;
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/api/equipment/${item._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates),
+      });
+      const data = await res.json();
+      if (res.status === 404 && data.error === "Route not found") {
+        throw new Error(`The configured API server does not have the equipment update route (${API_URL || window.location.origin}/api/equipment/${item._id}). Restart or redeploy the backend from the current server source.`);
+      }
+      if (!res.ok) throw new Error(data.error || "Could not update equipment.");
+
+      setEquipment((current) => current.map((listedItem) =>
+        listedItem._id === item._id ? data : listedItem
+      ));
+      setEditingEquipmentId(null);
+      setEquipmentEditForm({ pricePerHour: "", image: "" });
+    } catch (err) {
+      console.error("Error updating equipment:", err);
+      alert(err.message || "Error updating equipment.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleProductSubmit = async (e) => {
     e.preventDefault();
@@ -100,7 +169,7 @@ const SellerDashboard = () => {
     if (!user?.id) return;
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/equipment", {
+      const res = await fetch(`${API_URL}/api/equipment`, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...equipmentForm, pricePerHour: Number(equipmentForm.pricePerHour), ownerId: user.id }),
       });
@@ -129,7 +198,7 @@ const SellerDashboard = () => {
   const handleDeleteEquipment = async (id) => {
     if (!window.confirm("Delete equipment?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/equipment/${id}`, { method: "DELETE" });
+      const res = await fetch(`${API_URL}/api/equipment/${id}`, { method: "DELETE" });
       if (res.ok) fetchMyEquipment();
     } catch (err) { console.error(err); }
   };
@@ -387,7 +456,47 @@ const SellerDashboard = () => {
                             <div className="card-body p-3 d-flex flex-column">
                               <h6 className="card-title fw-bold text-truncate mb-1">{e.name}</h6>
                               <div className="small mb-2 text-secondary">{e.location}</div>
-                              <button onClick={() => handleDeleteEquipment(e._id)} className="btn btn-outline-danger btn-sm w-100 mt-auto"><i className="bi bi-trash me-1"></i> Delete</button>
+                              {editingEquipmentId === e._id ? (
+                                <form onSubmit={(event) => handleUpdateEquipment(event, e)} className="d-flex flex-column gap-2 mt-auto">
+                                  <label className="form-label small mb-0" htmlFor={`equipment-price-${e._id}`}>Price per hour (₹)</label>
+                                  <input
+                                    id={`equipment-price-${e._id}`}
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    required
+                                    value={equipmentEditForm.pricePerHour}
+                                    onChange={(event) => setEquipmentEditForm((current) => ({ ...current, pricePerHour: event.target.value }))}
+                                    className="form-control form-control-sm"
+                                  />
+                                  <label className="form-label small mb-0" htmlFor={`equipment-image-${e._id}`}>Replace image (optional)</label>
+                                  <input
+                                    id={`equipment-image-${e._id}`}
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleEquipmentImageChange}
+                                    className="form-control form-control-sm"
+                                  />
+                                  {equipmentEditForm.image && (
+                                    <img src={equipmentEditForm.image} alt="New equipment preview" className="img-fluid rounded" style={{ maxHeight: "100px", objectFit: "cover" }} />
+                                  )}
+                                  <button type="submit" disabled={loading} className="btn btn-success btn-sm w-100">
+                                    {loading ? "Saving..." : "Save Changes"}
+                                  </button>
+                                  <button type="button" onClick={() => setEditingEquipmentId(null)} className="btn btn-outline-secondary btn-sm w-100">
+                                    Cancel
+                                  </button>
+                                </form>
+                              ) : (
+                                <div className="d-flex gap-2 mt-auto">
+                                  <button onClick={() => handleEquipmentEdit(e)} className="btn btn-outline-success btn-sm w-100">
+                                    <i className="bi bi-pencil-square me-1"></i> Update
+                                  </button>
+                                  <button onClick={() => handleDeleteEquipment(e._id)} className="btn btn-outline-danger btn-sm w-100">
+                                    <i className="bi bi-trash me-1"></i> Delete
+                                  </button>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>

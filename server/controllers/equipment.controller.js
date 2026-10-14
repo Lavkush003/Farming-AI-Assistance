@@ -54,6 +54,45 @@ export const addEquipment = async (req, res) => {
   }
 };
 
+// Update the hourly rate and/or image for an equipment listing
+export const updateEquipment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { ownerId, pricePerHour, image } = req.body;
+    const equipment = await Equipment.findById(id);
+
+    if (!equipment) {
+      return res.status(404).json({ error: "Equipment not found" });
+    }
+    if (!ownerId || equipment.ownerId !== ownerId) {
+      return res.status(403).json({ error: "You are not allowed to update this equipment" });
+    }
+    if (pricePerHour === undefined && image === undefined) {
+      return res.status(400).json({ error: "Provide a price or image to update" });
+    }
+
+    if (pricePerHour !== undefined) {
+      const hourlyRate = Number(pricePerHour);
+      if (!Number.isFinite(hourlyRate) || hourlyRate < 0) {
+        return res.status(400).json({ error: "Price per hour must be a non-negative number" });
+      }
+      equipment.pricePerHour = hourlyRate;
+    }
+    if (image !== undefined) {
+      if (typeof image !== "string" || image.length === 0) {
+        return res.status(400).json({ error: "Image must be a non-empty string" });
+      }
+      equipment.image = image;
+    }
+
+    await equipment.save();
+    return res.status(200).json(equipment);
+  } catch (err) {
+    console.error("Error updating equipment:", err);
+    return res.status(500).json({ error: "Failed to update equipment" });
+  }
+};
+
 // Delete equipment
 export const deleteEquipment = async (req, res) => {
   try {
