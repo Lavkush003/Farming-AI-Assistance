@@ -28,14 +28,19 @@ export const addEquipment = async (req, res) => {
   try {
     const { name, description, pricePerHour, image, ownerId, location } = req.body;
     
-    if (!name || !pricePerHour || !ownerId || !location) {
+    if (!name || pricePerHour === undefined || pricePerHour === null || pricePerHour === "" || !ownerId || !location) {
       return res.status(400).json({ error: "Required fields missing" });
+    }
+
+    const hourlyRate = Number(pricePerHour);
+    if (!Number.isFinite(hourlyRate) || hourlyRate < 0) {
+      return res.status(400).json({ error: "Price per hour must be a non-negative number" });
     }
 
     const newEquipment = new Equipment({
       name,
       description,
-      pricePerHour,
+      pricePerHour: hourlyRate,
       image,
       ownerId,
       location

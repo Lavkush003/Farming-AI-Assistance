@@ -159,7 +159,7 @@ const SellerDashboard = () => {
 
         <div className="text-center mb-5">
           <h1 className="display-4 fw-bold text-warning mb-3">Seller Dashboard</h1>
-          <p className="lead text-secondary">Manage your inventory, equipment rentals, and track your farm's finances.</p>
+          <p className="lead text-secondary">Manage your inventory, offer affordable equipment rentals to nearby farmers, and track your farm's finances.</p>
         </div>
 
         {/* Tabs */}
@@ -328,7 +328,7 @@ const SellerDashboard = () => {
             <div className="col-lg-5">
               <div className={`p-4 rounded-4 ${shadowClass} border border-warning border-opacity-25`} style={{ background: cardBg, backdropFilter: "blur(10px)", borderColor: borderColor }}>
                 <h3 className="mb-4 text-warning fw-bold border-bottom border-warning border-opacity-25 pb-2">
-                  <i className="bi bi-tools me-2"></i>List Equipment
+                  <i className="bi bi-tools me-2"></i>Share Equipment at a Fair Rate
                 </h3>
                 <form onSubmit={handleEquipmentSubmit} className="d-flex flex-column gap-3">
                   <div className="form-group">
@@ -336,8 +336,9 @@ const SellerDashboard = () => {
                     <input type="text" name="name" value={equipmentForm.name} onChange={handleEquipmentChange} className="form-control bg-dark text-white border-secondary" placeholder="e.g. Mahindra Tractor" required />
                   </div>
                   <div className="form-group">
-                    <label className="form-label text-secondary small text-uppercase fw-bold">Price Per Hour (₹)</label>
-                    <input type="number" name="pricePerHour" value={equipmentForm.pricePerHour} onChange={handleEquipmentChange} className="form-control bg-dark text-white border-secondary" placeholder="500" min="0" required />
+                    <label className="form-label text-secondary small text-uppercase fw-bold">Affordable Price Per Hour (₹)</label>
+                    <input type="number" name="pricePerHour" value={equipmentForm.pricePerHour} onChange={handleEquipmentChange} className="form-control bg-dark text-white border-secondary" placeholder="Set a fair local rate" min="0" step="1" required />
+                    <div className="form-text text-secondary">Choose a fair rate that keeps equipment accessible to small and nearby farmers.</div>
                   </div>
                   <div className="form-group">
                     <label className="form-label text-secondary small text-uppercase fw-bold">Location</label>
@@ -359,7 +360,7 @@ const SellerDashboard = () => {
                     <textarea name="description" value={equipmentForm.description} onChange={handleEquipmentChange} className="form-control bg-dark text-white border-secondary" rows="2" required></textarea>
                   </div>
                   <button type="submit" disabled={loading} className={`btn w-100 fw-bold py-2 mt-2 shadow-sm btn-warning`}>
-                    {loading ? "Listing..." : "List Equipment"}
+                    {loading ? "Listing..." : "Offer Equipment for Rent"}
                   </button>
                 </form>
               </div>

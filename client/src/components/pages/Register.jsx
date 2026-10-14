@@ -187,6 +187,18 @@ const Register = () => {
 
                 </form>
 
+                <div className="mt-4 p-3 rounded-3 bg-success bg-opacity-10 text-center">
+                    <p className="mb-2">
+                        Need affordable farm equipment, or have machinery to rent out?
+                    </p>
+                    <Link to="/equipment" className="text-success fw-semibold">
+                        Explore Equipment Rentals
+                    </Link>
+                    <p className="small text-muted mb-0 mt-2">
+                        After creating an account, list your equipment from the Seller Dashboard.
+                    </p>
+                </div>
+
                 <p className="auth-link">
                     Already have an account?{" "}
                     <Link to="/login">
