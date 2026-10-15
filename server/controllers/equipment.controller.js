@@ -26,7 +26,7 @@ export const getMyEquipment = async (req, res) => {
 // Add new equipment
 export const addEquipment = async (req, res) => {
   try {
-    const { name, description, pricePerHour, image, ownerId, location } = req.body;
+    const { name, description, pricePerHour, pricePerDay, image, ownerId, location } = req.body;
     
     if (!name || pricePerHour === undefined || pricePerHour === null || pricePerHour === "" || !ownerId || !location) {
       return res.status(400).json({ error: "Required fields missing" });
@@ -37,10 +37,16 @@ export const addEquipment = async (req, res) => {
       return res.status(400).json({ error: "Price per hour must be a non-negative number" });
     }
 
+    const dailyRate = Number(pricePerDay) || 0;
+    if (dailyRate < 0) {
+      return res.status(400).json({ error: "Price per day must be a non-negative number" });
+    }
+
     const newEquipment = new Equipment({
       name,
       description,
       pricePerHour: hourlyRate,
+      pricePerDay: dailyRate,
       image,
       ownerId,
       location
@@ -58,7 +64,7 @@ export const addEquipment = async (req, res) => {
 export const updateEquipment = async (req, res) => {
   try {
     const { id } = req.params;
-    const { ownerId, pricePerHour, image } = req.body;
+    const { ownerId, pricePerHour, pricePerDay, image } = req.body;
     const equipment = await Equipment.findById(id);
 
     if (!equipment) {
@@ -67,7 +73,7 @@ export const updateEquipment = async (req, res) => {
     if (!ownerId || equipment.ownerId !== ownerId) {
       return res.status(403).json({ error: "You are not allowed to update this equipment" });
     }
-    if (pricePerHour === undefined && image === undefined) {
+    if (pricePerHour === undefined && pricePerDay === undefined && image === undefined) {
       return res.status(400).json({ error: "Provide a price or image to update" });
     }
 
@@ -77,6 +83,13 @@ export const updateEquipment = async (req, res) => {
         return res.status(400).json({ error: "Price per hour must be a non-negative number" });
       }
       equipment.pricePerHour = hourlyRate;
+    }
+    if (pricePerDay !== undefined) {
+      const dailyRate = Number(pricePerDay);
+      if (!Number.isFinite(dailyRate) || dailyRate < 0) {
+        return res.status(400).json({ error: "Price per day must be a non-negative number" });
+      }
+      equipment.pricePerDay = dailyRate;
     }
     if (image !== undefined) {
       if (typeof image !== "string" || image.length === 0) {

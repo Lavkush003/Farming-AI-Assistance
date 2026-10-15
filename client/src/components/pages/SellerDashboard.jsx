@@ -17,7 +17,7 @@ const SellerDashboard = () => {
   const [equipment, setEquipment] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editingEquipmentId, setEditingEquipmentId] = useState(null);
-  const [equipmentEditForm, setEquipmentEditForm] = useState({ pricePerHour: "", image: "" });
+  const [equipmentEditForm, setEquipmentEditForm] = useState({ pricePerHour: "", pricePerDay: "", image: "" });
 
   const [formData, setFormData] = useState({
     name: "", description: "", price: "", image: "", category: "",
@@ -28,7 +28,7 @@ const SellerDashboard = () => {
   });
 
   const [equipmentForm, setEquipmentForm] = useState({
-    name: "", description: "", pricePerHour: "", image: "", location: ""
+    name: "", description: "", pricePerHour: "", pricePerDay: "", image: "", location: ""
   });
 
   const fetchMyProducts = useCallback(async () => {
@@ -73,7 +73,7 @@ const SellerDashboard = () => {
 
   const handleEquipmentEdit = (item) => {
     setEditingEquipmentId(item._id);
-    setEquipmentEditForm({ pricePerHour: String(item.pricePerHour), image: "" });
+    setEquipmentEditForm({ pricePerHour: String(item.pricePerHour), pricePerDay: String(item.pricePerDay || ""), image: "" });
   };
 
   const handleEquipmentImageChange = (e) => {
@@ -105,7 +105,8 @@ const SellerDashboard = () => {
       return;
     }
 
-    const updates = { pricePerHour, ownerId: user.id };
+    const pricePerDay = Number(equipmentEditForm.pricePerDay) || 0;
+    const updates = { pricePerHour, pricePerDay, ownerId: user.id };
     if (equipmentEditForm.image) updates.image = equipmentEditForm.image;
 
     setLoading(true);
@@ -125,7 +126,7 @@ const SellerDashboard = () => {
         listedItem._id === item._id ? data : listedItem
       ));
       setEditingEquipmentId(null);
-      setEquipmentEditForm({ pricePerHour: "", image: "" });
+      setEquipmentEditForm({ pricePerHour: "", pricePerDay: "", image: "" });
     } catch (err) {
       console.error("Error updating equipment:", err);
       alert(err.message || "Error updating equipment.");
@@ -171,10 +172,10 @@ const SellerDashboard = () => {
     try {
       const res = await fetch(`${API_URL}/api/equipment`, {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...equipmentForm, pricePerHour: Number(equipmentForm.pricePerHour), ownerId: user.id }),
+        body: JSON.stringify({ ...equipmentForm, pricePerHour: Number(equipmentForm.pricePerHour), pricePerDay: Number(equipmentForm.pricePerDay) || 0, ownerId: user.id }),
       });
       if (!res.ok) throw new Error();
-      setEquipmentForm({ name: "", description: "", pricePerHour: "", image: "", location: "" });
+      setEquipmentForm({ name: "", description: "", pricePerHour: "", pricePerDay: "", image: "", location: "" });
       fetchMyEquipment();
     } catch { alert("Error adding equipment"); } finally { setLoading(false); }
   };
@@ -410,6 +411,11 @@ const SellerDashboard = () => {
                     <div className="form-text text-secondary">Choose a fair rate that keeps equipment accessible to small and nearby farmers.</div>
                   </div>
                   <div className="form-group">
+                    <label className="form-label text-secondary small text-uppercase fw-bold">Affordable Price Per Day (₹)</label>
+                    <input type="number" name="pricePerDay" value={equipmentForm.pricePerDay} onChange={handleEquipmentChange} className="form-control bg-dark text-white border-secondary" placeholder="Daily rental rate (optional)" min="0" step="1" />
+                    <div className="form-text text-secondary">Offer a discounted daily rate for longer rentals — great for seasonal demand.</div>
+                  </div>
+                  <div className="form-group">
                     <label className="form-label text-secondary small text-uppercase fw-bold">Location</label>
                     <input type="text" name="location" value={equipmentForm.location} onChange={handleEquipmentChange} className="form-control bg-dark text-white border-secondary" placeholder="e.g. Pune, Maharashtra" required />
                   </div>
@@ -451,7 +457,10 @@ const SellerDashboard = () => {
                           <div className={`card h-100 shadow-sm border ${isDark ? 'bg-black text-white border-secondary' : 'bg-light text-dark border-light'}`}>
                             <div className="position-relative">
                               <img src={e.image} alt={e.name} className="card-img-top" style={{ height: "150px", objectFit: "cover" }} />
-                              <span className="position-absolute top-0 end-0 badge m-2 bg-success text-white">₹{e.pricePerHour}/hr</span>
+                              <span className="position-absolute top-0 end-0 d-flex flex-column gap-1 m-2">
+                                <span className="badge bg-success text-white">₹{e.pricePerHour}/hr</span>
+                                {e.pricePerDay > 0 && <span className="badge bg-info text-dark">₹{e.pricePerDay}/day</span>}
+                              </span>
                             </div>
                             <div className="card-body p-3 d-flex flex-column">
                               <h6 className="card-title fw-bold text-truncate mb-1">{e.name}</h6>
@@ -467,6 +476,16 @@ const SellerDashboard = () => {
                                     required
                                     value={equipmentEditForm.pricePerHour}
                                     onChange={(event) => setEquipmentEditForm((current) => ({ ...current, pricePerHour: event.target.value }))}
+                                    className="form-control form-control-sm"
+                                  />
+                                  <label className="form-label small mb-0 mt-1" htmlFor={`equipment-price-day-${e._id}`}>Price per day (₹)</label>
+                                  <input
+                                    id={`equipment-price-day-${e._id}`}
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    value={equipmentEditForm.pricePerDay}
+                                    onChange={(event) => setEquipmentEditForm((current) => ({ ...current, pricePerDay: event.target.value }))}
                                     className="form-control form-control-sm"
                                   />
                                   <label className="form-label small mb-0" htmlFor={`equipment-image-${e._id}`}>Replace image (optional)</label>

@@ -16,19 +16,22 @@ function Navbar() {
   const [showChat, setShowChat] = React.useState(false);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
-      <div className="container-fluid">
+    <nav className="navbar navbar-expand-lg navbar-dark navbar-glass fixed-top py-2">
+      <div className="container-fluid px-lg-4">
 
         <Link
           className="navbar-brand d-flex align-items-center fw-bold fs-3 text-warning"
           to="/"
+          style={{ letterSpacing: "-0.5px" }}
         >
           <img
             src={logo}
             alt="FarmingHub Logo"
-            style={{ width: "40px", height: "40px", marginRight: "10px" }}
+            style={{ width: "38px", height: "38px", marginRight: "10px", filter: "drop-shadow(0 2px 8px rgba(76,175,80,0.3))" }}
           />
-          FarmingHub
+          <span style={{ background: "linear-gradient(135deg, #FFD54F, #FFB300)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            FarmingHub
+          </span>
         </Link>
 
         <button
@@ -160,7 +163,7 @@ function Navbar() {
                 </div>
               ) : (
                 <Link to="/login">
-                  <button className="btn btn-warning ms-3 px-4 fw-semibold">
+                  <button className="btn btn-warning ms-3 px-4 fw-semibold rounded-pill shadow-sm">
                     {t("login")}
                   </button>
                 </Link>
@@ -170,7 +173,7 @@ function Navbar() {
             {/* Language Selector */}
             <li className="nav-item ms-2">
               <select
-                className="form-select form-select-sm bg-dark text-warning border-warning"
+                className="form-select form-select-sm bg-dark text-warning border-warning rounded-pill px-3"
                 style={{ width: "auto", cursor: "pointer" }}
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
@@ -197,7 +200,8 @@ function Navbar() {
             height: "60px",
             zIndex: 1050,
             overflow: "hidden",
-            boxShadow: "0 4px 15px rgba(0,0,0,0.3)"
+            boxShadow: "0 6px 20px rgba(0,0,0,0.4)",
+            border: "2px solid #ffc107"
           }}
         >
           <img src={chatbotIcon} alt="Chatbot" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -211,41 +215,57 @@ function Navbar() {
         .nav-btn {
           background: transparent;
           border: none;
-          color: white;
-          padding: 0.5rem 1rem;
-          font-weight: 600;
+          color: rgba(240, 244, 238, 0.9);
+          padding: 0.45rem 0.85rem;
+          font-weight: 500;
+          font-size: 0.95rem;
+          border-radius: 8px;
+          transition: all 0.2s ease;
         }
 
         .nav-btn:hover {
           color: #ffc107;
+          background: rgba(46, 125, 50, 0.15);
         }
 
-        .dropdown-item.hover-warning:hover {
-            background-color: transparent;
-            color: #ffc107 !important;
+        .dropdown-menu-dark {
+          background-color: #162616 !important;
+          border: 1px solid rgba(76, 175, 80, 0.25) !important;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.45) !important;
+          border-radius: 12px;
+          padding: 8px;
         }
 
-        .theme-toggle {
-          background: transparent;
-          border: 1px solid #ffc107;
-          color: #ffc107;
+        .dropdown-item {
+          border-radius: 8px;
+          padding: 8px 14px;
+          transition: 0.2s ease;
         }
 
-        .theme-toggle:hover {
-          background: #ffc107;
-          color: #000;
-        }
-
-        body[data-theme="light"] .navbar {
-          background-color: #fff !important;
+        .dropdown-item:hover, .dropdown-item.hover-warning:hover {
+          background-color: rgba(46, 125, 50, 0.25) !important;
+          color: #ffd54f !important;
         }
 
         body[data-theme="light"] .nav-btn {
-          color: #000;
+          color: #1e2d1e;
         }
 
         body[data-theme="light"] .nav-btn:hover {
-          color: #ffc107;
+          color: #1b5e20;
+          background: rgba(27, 94, 32, 0.08);
+        }
+
+        body[data-theme="light"] .dropdown-menu-dark {
+          background-color: #ffffff !important;
+          border: 1px solid #dee2e6 !important;
+        }
+        body[data-theme="light"] .dropdown-menu-dark .dropdown-item {
+          color: #212529 !important;
+        }
+        body[data-theme="light"] .dropdown-menu-dark .dropdown-item:hover {
+          background-color: #e8f5e9 !important;
+          color: #1b5e20 !important;
         }
       `}</style>
     </nav >
