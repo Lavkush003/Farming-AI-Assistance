@@ -20,13 +20,24 @@ export const getWeatherAdvisory = async (req, res) => {
 
         const prompt = `You are an expert agricultural advisor. Based on the following current weather conditions and short-term forecast for a farming region, provide a very concise, 2-sentence actionable piece of advice for farmers (e.g., whether to water, spray pesticides, harvest, or protect crops). Keep it direct and easy to understand.\n\nWeather Data: ${JSON.stringify(weatherData)}`;
 
-        const response = await ai.models.generateContent({
-            model: "gemini-3.6-flash",
-            contents: prompt,
-            config: {
-                temperature: 0.7
+        const candidateModels = ["gemini-3.1-flash-lite", "gemini-flash-lite-latest", "gemini-3.5-flash-lite", "gemini-3.6-flash"];
+        let response = null;
+        for (const modelName of candidateModels) {
+            try {
+                response = await ai.models.generateContent({
+                    model: modelName,
+                    contents: prompt,
+                    config: { temperature: 0.7 }
+                });
+                if (response && response.text) break;
+            } catch (err) {
+                console.warn(`Weather advisory model ${modelName} failed:`, err.message);
             }
-        });
+        }
+
+        if (!response || !response.text) {
+            return res.status(500).json({ error: "Failed to generate weather advisory" });
+        }
 
         res.status(200).json({ advisory: response.text });
     } catch (error) {

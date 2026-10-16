@@ -16,7 +16,8 @@ function Navbar() {
   const [showChat, setShowChat] = React.useState(false);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark navbar-glass fixed-top py-2">
+    <>
+      <nav className="navbar navbar-expand-lg navbar-dark navbar-glass fixed-top py-2">
       <div className="container-fluid px-lg-4">
 
         <Link
@@ -187,89 +188,105 @@ function Navbar() {
           </ul>
         </div>
       </div>
+    </nav>
 
-      {/* Floating Chatbot Trigger with Bee Logo */}
-      {!showChat && (
-        <button
-          onClick={() => setShowChat(true)}
-          className="btn rounded-circle shadow-lg d-flex align-items-center justify-content-center position-fixed p-0 border-0"
-          style={{
-            bottom: "20px",
-            right: "20px",
-            width: "60px",
-            height: "60px",
-            zIndex: 1050,
-            overflow: "hidden",
-            boxShadow: "0 6px 20px rgba(0,0,0,0.4)",
-            border: "2px solid #ffc107"
-          }}
-        >
-          <img src={chatbotIcon} alt="Chatbot" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-        </button>
-      )}
+    {/* Floating Chatbot Trigger with Bee Logo */}
+    {!showChat && (
+      <button
+        onClick={() => setShowChat(true)}
+        className="btn rounded-circle shadow-lg d-flex align-items-center justify-content-center position-fixed p-0 border-0 chatbot-float-btn"
+        style={{
+          bottom: "24px",
+          right: "24px",
+          width: "60px",
+          height: "60px",
+          zIndex: 9998,
+          overflow: "hidden",
+          boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
+          border: "2.5px solid #ffc107",
+          backgroundColor: "#2e7d32",
+          cursor: "pointer"
+        }}
+        aria-label="Open FarmingHub AI Assistant"
+        title="FarmingHub AI Assistant"
+      >
+        <img src={chatbotIcon} alt="Chatbot" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      </button>
+    )}
 
-      {/* Render Chatbot */}
-      <Chatbot isOpen={showChat} onClose={() => setShowChat(false)} />
+    {/* Render Chatbot */}
+    <Chatbot isOpen={showChat} onClose={() => setShowChat(false)} />
 
-      <style>{`
-        .nav-btn {
-          background: transparent;
-          border: none;
-          color: rgba(240, 244, 238, 0.9);
-          padding: 0.45rem 0.85rem;
-          font-weight: 500;
-          font-size: 0.95rem;
-          border-radius: 8px;
-          transition: all 0.2s ease;
-        }
+    <style>{`
+      .chatbot-float-btn {
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+      }
+      .chatbot-float-btn:hover {
+        transform: scale(1.1) translateY(-2px);
+        box-shadow: 0 12px 28px rgba(255, 193, 7, 0.5) !important;
+      }
+      .chatbot-float-btn:active {
+        transform: scale(0.95);
+      }
 
-        .nav-btn:hover {
-          color: #ffc107;
-          background: rgba(46, 125, 50, 0.15);
-        }
+      .nav-btn {
+        background: transparent;
+        border: none;
+        color: rgba(240, 244, 238, 0.9);
+        padding: 0.45rem 0.85rem;
+        font-weight: 500;
+        font-size: 0.95rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+      }
 
-        .dropdown-menu-dark {
-          background-color: #162616 !important;
-          border: 1px solid rgba(76, 175, 80, 0.25) !important;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.45) !important;
-          border-radius: 12px;
-          padding: 8px;
-        }
+      .nav-btn:hover {
+        color: #ffc107;
+        background: rgba(46, 125, 50, 0.15);
+      }
 
-        .dropdown-item {
-          border-radius: 8px;
-          padding: 8px 14px;
-          transition: 0.2s ease;
-        }
+      .dropdown-menu-dark {
+        background-color: #162616 !important;
+        border: 1px solid rgba(76, 175, 80, 0.25) !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.45) !important;
+        border-radius: 12px;
+        padding: 8px;
+      }
 
-        .dropdown-item:hover, .dropdown-item.hover-warning:hover {
-          background-color: rgba(46, 125, 50, 0.25) !important;
-          color: #ffd54f !important;
-        }
+      .dropdown-item {
+        border-radius: 8px;
+        padding: 8px 14px;
+        transition: 0.2s ease;
+      }
 
-        body[data-theme="light"] .nav-btn {
-          color: #1e2d1e;
-        }
+      .dropdown-item:hover, .dropdown-item.hover-warning:hover {
+        background-color: rgba(46, 125, 50, 0.25) !important;
+        color: #ffd54f !important;
+      }
 
-        body[data-theme="light"] .nav-btn:hover {
-          color: #1b5e20;
-          background: rgba(27, 94, 32, 0.08);
-        }
+      body[data-theme="light"] .nav-btn {
+        color: #1e2d1e;
+      }
 
-        body[data-theme="light"] .dropdown-menu-dark {
-          background-color: #ffffff !important;
-          border: 1px solid #dee2e6 !important;
-        }
-        body[data-theme="light"] .dropdown-menu-dark .dropdown-item {
-          color: #212529 !important;
-        }
-        body[data-theme="light"] .dropdown-menu-dark .dropdown-item:hover {
-          background-color: #e8f5e9 !important;
-          color: #1b5e20 !important;
-        }
-      `}</style>
-    </nav >
-  );
+      body[data-theme="light"] .nav-btn:hover {
+        color: #1b5e20;
+        background: rgba(27, 94, 32, 0.08);
+      }
+
+      body[data-theme="light"] .dropdown-menu-dark {
+        background-color: #ffffff !important;
+        border: 1px solid #dee2e6 !important;
+      }
+      body[data-theme="light"] .dropdown-menu-dark .dropdown-item {
+        color: #212529 !important;
+      }
+      body[data-theme="light"] .dropdown-menu-dark .dropdown-item:hover {
+        background-color: #e8f5e9 !important;
+        color: #1b5e20 !important;
+      }
+    `}</style>
+  </>
+);
 }
 
 export default Navbar;

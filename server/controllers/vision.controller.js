@@ -27,21 +27,34 @@ Please respond entirely in ${language}. Keep the response structured and easy to
         // Strip the data:image/jpeg;base64, prefix if it exists
         const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
 
-        const response = await ai.models.generateContent({
-            model: "gemini-3.6-flash",
-            contents: [
-                prompt,
-                {
-                    inlineData: {
-                        data: base64Data,
-                        mimeType: mimeType
+        const candidateModels = ["gemini-3.1-flash-lite", "gemini-flash-lite-latest", "gemini-3.5-flash-lite", "gemini-3.6-flash"];
+        let response = null;
+        for (const modelName of candidateModels) {
+            try {
+                response = await ai.models.generateContent({
+                    model: modelName,
+                    contents: [
+                        prompt,
+                        {
+                            inlineData: {
+                                data: base64Data,
+                                mimeType: mimeType
+                            }
+                        }
+                    ],
+                    config: {
+                        temperature: 0.4
                     }
-                }
-            ],
-            config: {
-                temperature: 0.4
+                });
+                if (response && response.text) break;
+            } catch (err) {
+                console.warn(`Vision AI model ${modelName} failed:`, err.message);
             }
-        });
+        }
+
+        if (!response || !response.text) {
+            return res.status(500).json({ error: "Failed to analyze crop image" });
+        }
 
         res.status(200).json({ result: response.text });
     } catch (error) {

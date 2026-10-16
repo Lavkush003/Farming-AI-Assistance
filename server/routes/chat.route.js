@@ -104,28 +104,41 @@ router.post("/", async (req, res) => {
             apiKey: process.env.GEMINI_API_KEY
         });
 
-        // Send request to Gemini
-        const response = await ai.models.generateContent({
-            model: "gemini-3.6-flash",
-            contents: message,
-            config: {
-                systemInstruction: systemInstruction,
-                temperature: 0.7
+        // Model fallback list with active, high-quota models first
+        const candidateModels = [
+            "gemini-3.1-flash-lite",
+            "gemini-flash-lite-latest",
+            "gemini-3.5-flash-lite",
+            "gemini-3.6-flash"
+        ];
+        let response = null;
+        let lastError = null;
+
+        for (const modelName of candidateModels) {
+            try {
+                response = await ai.models.generateContent({
+                    model: modelName,
+                    contents: message,
+                    config: {
+                        systemInstruction: systemInstruction,
+                        temperature: 0.7
+                    }
+                });
+                if (response && response.text) {
+                    console.log(`✅ Gemini response received using model: ${modelName}`);
+                    break;
+                }
+            } catch (modelErr) {
+                lastError = modelErr;
+                console.warn(`⚠️ Model ${modelName} encountered issue: ${modelErr.message}. Trying next candidate...`);
             }
-        });
-
-        console.log("✅ Gemini response received");
-
-        const text = response.text;
-
-        if (!text) {
-            console.error("❌ Gemini returned an empty response");
-
-            return res.status(500).json({
-                error: "Gemini returned an empty response"
-            });
         }
 
+        if (!response || !response.text) {
+            throw lastError || new Error("All Gemini model attempts returned empty response");
+        }
+
+        const text = response.text;
         console.log("🤖 Gemini:", text);
 
         return res.json({
@@ -185,18 +198,35 @@ Please provide:
 
 Format your response clearly with headers and bullet points. Use ₹ for currency.`;
 
-        const response = await ai.models.generateContent({
-            model: "gemini-3.6-flash",
-            contents: prompt,
-            config: { temperature: 0.7 }
-        });
+        const candidateModels = [
+            "gemini-3.1-flash-lite",
+            "gemini-flash-lite-latest",
+            "gemini-3.5-flash-lite",
+            "gemini-3.6-flash"
+        ];
+        let response = null;
+        let lastError = null;
 
-        const text = response.text;
-        if (!text) {
-            return res.status(500).json({ error: "AI returned empty response" });
+        for (const modelName of candidateModels) {
+            try {
+                response = await ai.models.generateContent({
+                    model: modelName,
+                    contents: prompt,
+                    config: { temperature: 0.7 }
+                });
+                if (response && response.text) {
+                    break;
+                }
+            } catch (err) {
+                lastError = err;
+            }
         }
 
-        return res.json({ result: text });
+        if (!response || !response.text) {
+            throw lastError || new Error("Yield prediction AI response was empty");
+        }
+
+        return res.json({ result: response.text });
 
     } catch (error) {
         console.error("Yield prediction error:", error);
