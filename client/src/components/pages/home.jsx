@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import videoBg from "../../assets/front_video.mp4";
 import WeatherWidget from "../weather/WeatherWidget";
@@ -6,6 +6,20 @@ import { useLanguage } from "../../context/LanguageContext";
 
 function Home() {
   const { t } = useLanguage();
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn("Autoplay was prevented by browser policy:", err);
+        });
+      }
+    }
+  }, []);
 
   return (
     <div className="home-page">
@@ -26,11 +40,13 @@ function Home() {
       >
         {/* Background Video */}
         <video
+          ref={videoRef}
           src={videoBg}
           autoPlay
           loop
           muted
           playsInline
+          preload="auto"
           style={{
             position: "absolute",
             top: "50%",
@@ -43,7 +59,11 @@ function Home() {
             objectFit: "cover",
             filter: "brightness(0.7)",
           }}
-        />
+        >
+          <source src={videoBg} type="video/mp4" />
+          <source src="/front_video.mp4" type="video/mp4" />
+          <source src="/assets/front_video.mp4" type="video/mp4" />
+        </video>
 
         {/* Dynamic Gradient Overlay */}
         <div
