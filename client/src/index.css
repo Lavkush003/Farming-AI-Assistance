@@ -17,14 +17,14 @@
   --accent-gradient: linear-gradient(135deg, #f9a825 0%, #ff8f00 100%);
   --accent-glow: rgba(249, 168, 37, 0.35);
 
-  /* Modern Forest Dark Surfaces (Replaces pure #000) */
-  --surface-dark: #0f1a0f;
-  --surface-dark-alt: #132213;
-  --card-dark: #162616;
-  --card-dark-hover: #1d331d;
-  --card-elevated: #223c22;
+  /* Modern Midnight Slate & Forest Dark Surfaces */
+  --surface-dark: #0a0f14;
+  --surface-dark-alt: #0e1620;
+  --card-dark: #121c27;
+  --card-dark-hover: #172433;
+  --card-elevated: #1a293a;
   --border-dark: rgba(255, 255, 255, 0.08);
-  --border-dark-hover: rgba(76, 175, 80, 0.4);
+  --border-dark-hover: rgba(76, 175, 80, 0.45);
   --border-accent: rgba(249, 168, 37, 0.35);
 
   /* Light Theme Surfaces */
@@ -87,6 +87,11 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
 /* Dark Theme (Default) */
 body[data-theme="dark"] {
   background-color: var(--surface-dark);
+  background-image: 
+    radial-gradient(circle at 18% 15%, rgba(46, 125, 50, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 82% 55%, rgba(249, 168, 37, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 50% 90%, rgba(30, 58, 30, 0.14) 0%, transparent 50%);
+  background-attachment: fixed;
   color: var(--text-primary-dark);
 }
 
@@ -188,10 +193,10 @@ body[data-theme="light"] .text-secondary {
    ========================================================================== */
 
 .navbar-glass {
-  background: rgba(15, 26, 15, 0.88) !important;
+  background: rgba(10, 15, 20, 0.88) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(76, 175, 80, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   transition: all 0.3s ease;
 }
 
@@ -205,15 +210,17 @@ body[data-theme="light"] .navbar-glass {
    ========================================================================== */
 
 body[data-theme="dark"] footer.app-footer {
-  background: linear-gradient(180deg, var(--surface-dark-alt) 0%, #0a120a 100%);
+  background: linear-gradient(180deg, #0b0f17 0%, #070a0f 100%);
   color: var(--text-primary-dark);
-  border-top: 1px solid rgba(76, 175, 80, 0.2);
+  border-top: 1px solid rgba(249, 168, 37, 0.25);
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.45);
 }
 
 body[data-theme="light"] footer.app-footer {
-  background: #ffffff;
+  background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
   color: var(--text-primary-light);
-  border-top: 1px solid var(--border-light);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
 }
 
 .footer-link {

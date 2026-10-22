@@ -73,7 +73,7 @@ function Home() {
             inset: 0,
             zIndex: 2,
             background:
-              "linear-gradient(180deg, rgba(15, 26, 15, 0.45) 0%, rgba(15, 26, 15, 0.6) 50%, rgba(15, 26, 15, 0.95) 100%)",
+              "linear-gradient(180deg, rgba(10, 15, 20, 0.45) 0%, rgba(10, 15, 20, 0.65) 50%, #0a0f14 100%)",
           }}
         >
           <div className="text-center" style={{ maxWidth: "860px" }}>
@@ -148,15 +148,72 @@ function Home() {
       </section>
 
       {/* ======================================
+          SMART PRECISION AGRI SUITE (ET0 & PEST FORECAST)
+      ====================================== */}
+      <section className="container mb-5" style={{ zIndex: 10, position: "relative" }}>
+        <div className="row g-4">
+          <div className="col-md-6">
+            <div
+              className="p-4 rounded-4 shadow-sm h-100 card-hover"
+              style={{
+                background: "linear-gradient(135deg, rgba(14, 165, 233, 0.12) 0%, rgba(15, 23, 42, 0.75) 100%)",
+                border: "1px solid rgba(56, 189, 248, 0.25)",
+                backdropFilter: "blur(10px)",
+              }}
+            >
+              <div className="d-flex align-items-center justify-content-between mb-3">
+                <span className="badge rounded-pill bg-info bg-opacity-25 text-info border border-info border-opacity-50 px-3 py-1 small">
+                  💧 Precision Hydration
+                </span>
+                <span className="text-muted small">FAO-56 Standard</span>
+              </div>
+              <h4 className="fw-bold text-white mb-2">Smart Irrigation (ET₀) Scheduler</h4>
+              <p className="text-muted small mb-4">
+                Calculate exact daily crop water needs based on live solar evapotranspiration. Optimize tube-well pump running hours and protect roots from waterlogging & fungal rot.
+              </p>
+              <Link to="/smart-irrigation" className="btn btn-sm btn-info text-dark fw-bold rounded-pill px-4">
+                Launch Water Scheduler →
+              </Link>
+            </div>
+          </div>
+
+          <div className="col-md-6">
+            <div
+              className="p-4 rounded-4 shadow-sm h-100 card-hover"
+              style={{
+                background: "linear-gradient(135deg, rgba(249, 115, 22, 0.12) 0%, rgba(15, 23, 42, 0.75) 100%)",
+                border: "1px solid rgba(251, 146, 60, 0.25)",
+                backdropFilter: "blur(10px)",
+              }}
+            >
+              <div className="d-flex align-items-center justify-content-between mb-3">
+                <span className="badge rounded-pill bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 px-3 py-1 small">
+                  🐛 Early Bio-Security
+                </span>
+                <span className="text-muted small">Degree-Day Modeling</span>
+              </div>
+              <h4 className="fw-bold text-white mb-2">Pest Outbreak Early Warning</h4>
+              <p className="text-muted small mb-4">
+                Forecast pest emergence (Pink Bollworm, Fall Armyworm, Aphids) 3–7 days before crop damage using thermal Growing Degree-Day (GDD) bio-meteorological models.
+              </p>
+              <Link to="/pest-forecast" className="btn btn-sm btn-warning text-dark fw-bold rounded-pill px-4">
+                Check Outbreak Risk →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ======================================
           WHO WE ARE SECTION
       ====================================== */}
       <section className="container py-5">
         <div
           className="p-4 p-md-5 rounded-4 shadow-sm"
           style={{
-            background: "rgba(22, 38, 22, 0.6)",
-            border: "1px solid rgba(76, 175, 80, 0.2)",
-            backdropFilter: "blur(12px)",
+            background: "rgba(18, 28, 39, 0.7)",
+            border: "1px solid rgba(76, 175, 80, 0.25)",
+            backdropFilter: "blur(14px)",
           }}
         >
           <div className="text-center mb-4">
@@ -188,7 +245,7 @@ function Home() {
       {/* ======================================
           WHY CHOOSE FARMINGHUB
       ====================================== */}
-      <section className="py-5" style={{ background: "rgba(10, 18, 10, 0.4)" }}>
+      <section className="py-5" style={{ background: "rgba(10, 15, 20, 0.55)", borderTop: "1px solid rgba(255, 255, 255, 0.04)", borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}>
         <div className="container">
           <div className="text-center mb-5">
             <span className="text-warning fw-bold text-uppercase small" style={{ letterSpacing: "2px" }}>
@@ -377,8 +434,8 @@ function Home() {
           className="text-center p-5 rounded-5 shadow-lg position-relative overflow-hidden"
           style={{
             background:
-              "linear-gradient(135deg, #132213 0%, #1B5E20 50%, #0F1A0F 100%)",
-            border: "1px solid rgba(76, 175, 80, 0.3)",
+              "linear-gradient(135deg, #0e1722 0%, #16361e 50%, #0a0f14 100%)",
+            border: "1px solid rgba(76, 175, 80, 0.35)",
           }}
         >
           <span

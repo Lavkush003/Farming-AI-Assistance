@@ -1,16 +1,41 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/farmhive-logo.png";
+import { useTheme } from "../../context/ThemeContext";
 
 function Footer() {
+  const themeContext = useTheme();
+  const isDark = themeContext ? themeContext.theme !== "light" : true;
+
   return (
     <footer
       className="app-footer position-relative mt-5 pt-5 pb-4"
       style={{
-        background: "linear-gradient(180deg, #132213 0%, #0a140a 100%)",
-        borderTop: "1px solid rgba(76, 175, 80, 0.25)",
+        background: isDark
+          ? "linear-gradient(180deg, #0b0f17 0%, #070a0f 100%)"
+          : "linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%)",
+        borderTop: isDark
+          ? "1px solid rgba(249, 168, 37, 0.25)"
+          : "1px solid rgba(0, 0, 0, 0.08)",
+        boxShadow: isDark
+          ? "0 -10px 30px rgba(0, 0, 0, 0.45)"
+          : "0 -4px 20px rgba(0, 0, 0, 0.04)",
       }}
     >
+      {/* Sleek ambient highlight glow line */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: "15%",
+          right: "15%",
+          height: "1px",
+          background: isDark
+            ? "linear-gradient(90deg, transparent 0%, rgba(249, 168, 37, 0.6) 50%, transparent 100%)"
+            : "linear-gradient(90deg, transparent 0%, rgba(46, 125, 50, 0.4) 50%, transparent 100%)",
+          pointerEvents: "none",
+        }}
+      />
       <div className="container">
         <div className="row g-4 mb-4">
           
@@ -97,6 +122,16 @@ function Footer() {
                 </Link>
               </li>
               <li className="mb-2">
+                <Link to="/smart-irrigation" className="text-decoration-none footer-link small">
+                  💧 Smart Irrigation (ET₀)
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link to="/pest-forecast" className="text-decoration-none footer-link small">
+                  🐛 Pest Outbreak Warning
+                </Link>
+              </li>
+              <li className="mb-2">
                 <Link to="/cold-storage" className="text-decoration-none footer-link small">
                   ❄️ Cold Storage Finder
                 </Link>
@@ -169,7 +204,7 @@ function Footer() {
           </div>
         </div>
 
-        <hr style={{ borderColor: "rgba(76, 175, 80, 0.2)" }} />
+        <hr style={{ borderColor: isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)" }} />
 
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 pt-2">
           <p className="text-muted small mb-0">

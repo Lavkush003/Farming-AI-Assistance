@@ -97,6 +97,8 @@ function Navbar() {
               <ul className="dropdown-menu dropdown-menu-dark">
                 <li><Link className="dropdown-item" to="/equipment">🚜 Equipment Rentals</Link></li>
                 <li><Link className="dropdown-item" to="/yield-predictor">📈 Yield Predictor</Link></li>
+                <li><Link className="dropdown-item" to="/smart-irrigation">💧 Smart Irrigation (ET₀)</Link></li>
+                <li><Link className="dropdown-item" to="/pest-forecast">🐛 Pest Outbreak Warning</Link></li>
                 <li><Link className="dropdown-item" to="/cold-storage">❄️ Cold Storage</Link></li>
                 <li><Link className="dropdown-item" to="/transport">🚚 Transport</Link></li>
               </ul>

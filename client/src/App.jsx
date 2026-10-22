@@ -16,6 +16,8 @@ import Equipment from "./components/pages/Equipment.jsx";
 import YieldPredictor from "./components/pages/YieldPredictor.jsx";
 import ColdStorage from "./components/pages/ColdStorage.jsx";
 import Transport from "./components/pages/Transport.jsx";
+import SmartIrrigation from "./components/pages/SmartIrrigation.jsx";
+import PestForecast from "./components/pages/PestForecast.jsx";
 import { Routes, Route } from "react-router-dom";
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
         <Route path="/schemes" element={<Schemes />} />
         <Route path="/equipment" element={<Equipment />} />
         <Route path="/yield-predictor" element={<YieldPredictor />} />
+        <Route path="/smart-irrigation" element={<SmartIrrigation />} />
+        <Route path="/pest-forecast" element={<PestForecast />} />
         <Route path="/cold-storage" element={<ColdStorage />} />
         <Route path="/transport" element={<Transport />} />
         <Route path="/login" element={<Login />} />
